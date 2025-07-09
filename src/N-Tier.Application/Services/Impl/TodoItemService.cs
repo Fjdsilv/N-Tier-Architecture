@@ -15,7 +15,14 @@ public class TodoItemService(
     public async Task<IEnumerable<TodoItemResponseModel>> GetAllByListIdAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
-        var todoItems = await todoItemRepository.GetAllAsync(ti => ti.List.Id == id);
+        //var todoItems = await todoItemRepository.GetAllAsync(ti => ti.List.Id == id);
+        var todoItems = await todoItemRepository.GetAllAsync(ti => ti.List.Id == id && ti.CreatedOn <= ti.List.Items[ti.List.Items.Count - 3].CreatedOn);
+
+        //var todoItems = await todoItemRepository.GetAllAsync(ti => ti.List.Id == id);
+
+        //var limitDate = todoItems[todoItems.Count - 3].CreatedOn;
+
+        //var theThreeOldest = todoItems.Where(ti => ti.CreatedOn <= limitDate).ToList();
 
         return mapper.Map<IEnumerable<TodoItemResponseModel>>(todoItems);
     }
